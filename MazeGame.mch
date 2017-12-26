@@ -7,7 +7,7 @@ MACHINE
     
 SETS
     ANSWER = {yes, no};
-    REPORT = {ERROR_Robot_hits_top_boundary, ERROR_Robot_hits_east_boundary, ERROR_Robot_hits_south_boundary, ERROR_Robot_hits_west_boundary, ERROR_It_is_a_wall_square, Possible_Move, Teleport_only_in_intermediate_state, ERROR_Robot_is_in_exit_square, Teleport_success}    
+    REPORT = {ERROR_Robot_hits_top_boundary, ERROR_Robot_hits_east_boundary, ERROR_Robot_hits_south_boundary, ERROR_Robot_hits_west_boundary, ERROR_It_is_a_wall_square, Possible_Move, Teleport_allowed_only_in_intermediate_state, ERROR_Cannot_teleport_to_a_wall, Teleport_success}    
     
              
 CONSTANTS
@@ -57,19 +57,7 @@ OPERATIONS
             ans := no
         END
     END;
-    
-    
-    
-    output <-- visitedSquare  =
-    BEGIN
-        IF ((robotAtX |-> robotAtY) : visitedPath)
-        THEN
-            output := yes
-        ELSE
-            output := no
-        END
-    END;
-    
+        
     
     
     outputRoute <-- robotsRoute =
@@ -77,26 +65,6 @@ OPERATIONS
         outputRoute := visitedSquareSeq
     END;
     
-    
-    
-    result <-- Teleport =
-    PRE
-        robotAtX : 1..width & robotAtY : 1..height 
-    THEN
-        IF (size(visitedSquareSeq) = 0)   
-        THEN
-           result := Teleport_only_in_intermediate_state 
-       ELSIF ((robotAtX |-> robotAtY) = exitSquare)           
-       THEN
-           result := ERROR_Robot_is_in_exit_square
-       ELSE           
-           robotAtX := 1 ||
-           robotAtY := 5 ||
-           visitedSquareSeq := (visitedSquareSeq <- (robotAtX |->  robotAtY)) ||
-           visitedPath := visitedPath \/ {robotAtX |->  robotAtY} ||
-           result := Teleport_success
-        END
-    END;
         
                   
     report <--  MoveNorth = 
@@ -175,8 +143,41 @@ OPERATIONS
            robotAtX := robotAtX-1 ||           
            report := Possible_Move             
        END
-   END   
+   END; 
    
-  
-  
+    
+    
+    result <-- Teleport(teleportToX, teleportToY) =
+    PRE
+        teleportToX : 1..width & teleportToY : 1..height & (teleportToX |-> teleportToY):squareX * squareY
+    THEN
+        IF ((teleportToX |-> teleportToY):wallSquares)   
+        THEN
+           result := ERROR_Cannot_teleport_to_a_wall            
+       ELSIF (size(visitedSquareSeq) = 0)           
+       THEN
+           result := Teleport_allowed_only_in_intermediate_state
+       ELSE           
+           robotAtX := teleportToX ||
+           robotAtY := teleportToY ||
+           visitedSquareSeq := (visitedSquareSeq <- (robotAtX |->  robotAtY)) ||
+           visitedPath := visitedPath \/ {robotAtX |->  robotAtY} ||
+           result := Teleport_success
+        END
+    END;
+     
+    
+    
+    output <-- visitedSquare  =
+    BEGIN
+        IF ((robotAtX |-> robotAtY) : visitedPath)
+        THEN
+            output := yes
+        ELSE
+            output := no
+        END
+    END
+    
+    
+    
 END
