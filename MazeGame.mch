@@ -83,7 +83,7 @@ OPERATIONS
     PRE
         robotAtX : 1..width & robotAtY : 1..height 
     THEN
-        IF ((robotAtX |-> robotAtY) = entrySquare)   
+        IF (size(visitedSquareSeq) = 0)   
         THEN
            result := Teleport_only_in_intermediate_state 
        ELSIF ((robotAtX |-> robotAtY) = exitSquare)           
