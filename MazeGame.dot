@@ -1,0 +1,21 @@
+digraph history {
+graph [nodesep=1.5, ranksep=1.5];
+root [shape=invtriangle, color="#425955", fontsize=12, penwidth=2, label="root"];
+
+0 [shape=box, color="#425955", fontsize=12, penwidth=2, label="width = 7,height = 5,entrySquare = (1\|-\>1),\nexitSquare = (1\|-\>5),squareX = \{1,2,3,4,5,6,7\},squareY = \{1,2,3,4,5\},\nwallSquares(1) = 3,wallSquares(2) = 1,wallSquares(2) = 3,\nwallSquares(2) = 5,wallSquares(3) = 3,wallSquares(4) = 2,\nwallSquares(4) = 3,wallSquares(4) = 4,wallSquares(6) = 1,\nwallSquares(6) = 2,wallSquares(6) = 4,wallSquares(7) = 4"];
+
+1 [shape=box, style=filled, color="#9C080C", fontsize=12, penwidth=2, label="robotAtX = 1,robotAtY = 1,visitedSquareSeq = [],\nvisitedPath = \{\}"];
+
+2 [shape=box, style=filled, color="#9C080C", fontsize=12, penwidth=2, label="robotAtX = 1,robotAtY = 2,visitedSquareSeq(1) = (1\|-\>1),\nvisitedPath(1) = 1"];
+
+4 [shape=doubleoctagon, style=filled, color="#9C080C", fontsize=12, penwidth=2, label="robotAtX = 2,robotAtY = 2,visitedSquareSeq(1) = (1\|-\>1),\nvisitedSquareSeq(2) = (1\|-\>2),visitedPath(1) = 1,visitedPath(1) = 2"];
+
+root -> 0 [style = dotted, color = black, label="SETUP_CONSTANTS(7,5,(1\|-\>1),(1\|-\>5),\{1,2,3,4,5,6,7\n\},\{1,2,3,4,5\},\{(1\|-\>3),(2\|-\>1),(2\|-\>3),(2\|-\>5),(3\|\n-\>3),(4\|-\>2),(4\|-\>3),(4\|-\>4),(6\|-\>1),(6\|-\>2),(6\|-\>4\n),(7\|-\>4)\})", fontsize=12];
+
+0 -> 1 [color = "#1B1D26", label="INITIALISATION(1,1,\{\},\{\})", fontsize=12];
+
+1 -> 2 [color = "#1B1D26", label="MoveNorth--\>Possible_Move", fontsize=12];
+
+2 -> 4 [color = "#1B1D26", label="MoveEast--\>Possible_Move", fontsize=12];
+
+}
