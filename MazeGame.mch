@@ -149,33 +149,35 @@ OPERATIONS
     
     result <-- Teleport(teleportToX, teleportToY) =
     PRE
-        teleportToX : 1..width & teleportToY : 1..height & (teleportToX |-> teleportToY):squareX * squareY
+        teleportToX :  1..width & teleportToY : 1..height
     THEN
-        IF ((teleportToX |-> teleportToY):wallSquares)   
+        IF ((teleportToX, teleportToY):wallSquares)   
         THEN
-           result := ERROR_Cannot_teleport_to_a_wall            
+           result := ERROR_Cannot_teleport_to_a_wall           
        ELSIF (size(visitedSquareSeq) = 0)           
        THEN
-           result := Teleport_allowed_only_in_intermediate_state
+           result := Teleport_allowed_only_in_intermediate_state           
        ELSE           
            robotAtX := teleportToX ||
            robotAtY := teleportToY ||
-           visitedSquareSeq := (visitedSquareSeq <- (robotAtX |->  robotAtY)) ||
-           visitedPath := visitedPath \/ {robotAtX |->  robotAtY} ||
-           result := Teleport_success
+           visitedSquareSeq := (visitedSquareSeq <- (teleportToX,  teleportToY)) ||
+           visitedPath := visitedPath \/ {teleportToX |->  teleportToY} ||
+           result := Teleport_success           
         END
     END;
      
     
     
-    output <-- visitedSquare  =
-    BEGIN
-        IF ((robotAtX |-> robotAtY) : visitedPath)
+    output <-- visitedSquare (pathSquareX, pathSquareY)  =
+    PRE
+        pathSquareX : 1..width & pathSquareY : 1..height & pathSquareX |-> pathSquareY /: wallSquares
+    THEN
+        IF ((pathSquareX |-> pathSquareY) : visitedPath) 
         THEN
             output := yes
         ELSE
             output := no
-        END
+        END                
     END
     
     
