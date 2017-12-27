@@ -7,7 +7,7 @@ MACHINE
     
 SETS
     ANSWER = {yes, no};
-    REPORT = {ERROR_Robot_hits_top_boundary, ERROR_Robot_hits_east_boundary, ERROR_Robot_hits_south_boundary, ERROR_Robot_hits_west_boundary, ERROR_It_is_a_wall_square, Possible_Move, Teleport_allowed_only_in_intermediate_state, ERROR_Cannot_teleport_to_a_wall, Teleport_success}    
+    REPORT = {ERROR_Robot_hits_top_boundary, ERROR_Robot_hits_east_boundary, ERROR_Robot_hits_south_boundary, ERROR_Robot_hits_west_boundary, ERROR_It_is_a_wall_square, Possible_Move, Teleport_allowed_only_in_intermediate_state, ERROR_Cannot_teleport_to_a_wall, ERROR_Cannot_teleport_to_current_square_itself, Teleport_success}    
     
              
 CONSTANTS
@@ -151,12 +151,15 @@ OPERATIONS
     PRE
         teleportToX :  1..width & teleportToY : 1..height
     THEN
-        IF ((teleportToX, teleportToY):wallSquares)   
-        THEN
+       IF ((teleportToX, teleportToY):wallSquares)   
+       THEN
            result := ERROR_Cannot_teleport_to_a_wall           
        ELSIF (size(visitedSquareSeq) = 0)           
        THEN
-           result := Teleport_allowed_only_in_intermediate_state           
+           result := Teleport_allowed_only_in_intermediate_state
+       ELSIF (teleportToX = robotAtX  & teleportToY = robotAtY)
+       THEN
+           result := ERROR_Cannot_teleport_to_current_square_itself
        ELSE           
            robotAtX := teleportToX ||
            robotAtY := teleportToY ||
