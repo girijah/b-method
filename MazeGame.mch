@@ -151,7 +151,7 @@ OPERATIONS
     PRE
         teleportToX :  1..width & teleportToY : 1..height
     THEN
-       IF ((teleportToX, teleportToY):wallSquares)   
+       IF ((teleportToX |-> teleportToY):wallSquares)   
        THEN
            result := ERROR_Cannot_teleport_to_a_wall           
        ELSIF (size(visitedSquareSeq) = 0)           
@@ -163,7 +163,7 @@ OPERATIONS
        ELSE           
            robotAtX := teleportToX ||
            robotAtY := teleportToY ||
-           visitedSquareSeq := (visitedSquareSeq <- (teleportToX,  teleportToY)) ||
+           visitedSquareSeq := (visitedSquareSeq <- (teleportToX |->  teleportToY)) ||
            visitedPath := visitedPath \/ {teleportToX |->  teleportToY} ||
            result := Teleport_success           
         END
